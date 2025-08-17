@@ -1,0 +1,41 @@
+{% extends 'base.html'%}
+{% block title %}
+Welcome To SmartRoute
+{% endblock %}
+
+{% block content %}
+<body class = "text-center">
+    <div class= "container"> 
+<br>
+<div class="centered-typewriter">
+    <h2  class="typewriter" >Your intelligent Toll and Route PLanner</h2>
+</div>
+<br>
+<h6 style="text-align: center;" class="hover-text">Smart Route helps you to find the best way to travel by analzing and comparing the routes based on:</h6>
+<br>
+
+<div class="card-list">
+  <a href="{{url_for('SmartRoute')}}" class="card pink-card">
+    <h3 color="">Shortest Route</h3>
+    <p>Choose the most direct routes to conserve fuels and resources.</p>
+    <span class="badge developer">Shortest Route</span>
+  </a>
+
+  <a href="{{url_for('SmartRoute')}}" class="card green-card">
+    <h3>Minimum Toll</h3>
+    <p>Find the Path with least toll charges to reduce your travel costs..</p>
+    <span class="badge designer">Minimum Toll</span>
+  </a>
+
+  <a  href="{{url_for('SmartRoute')}}" class="card blue-card">
+    <h3>Shortest Time</h3>
+    <p>Get the roues to save you valuable hours .</p>
+    <span class="badge editor">
+      Shortest Time
+    </span>
+  </a>
+  </a>
+</div>
+    </div>
+</body>
+{% endblock %}

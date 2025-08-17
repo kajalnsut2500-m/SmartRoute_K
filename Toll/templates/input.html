@@ -1,0 +1,75 @@
+{% extends 'base.html'%}
+{% block title%}
+Smart Route
+{% endblock %}
+{% block content%}
+
+<div class="hero-section">
+  <form method="POST" action="{{ url_for('SmartRoute') }}">
+    {{ form.hidden_tag() }}
+    
+    <div class="form-group">
+      {{ form.source.label(class="form-label") }}
+      {{ form.source(class="form-control city-search") }}
+      <datalist id="source-cities"></datalist>
+    </div>
+    
+    <div class="form-group">
+      {{ form.destination.label(class="form-label") }}
+      {{ form.destination(class="form-control city-search") }}
+      <datalist id="dest-cities"></datalist>
+    </div>
+    
+    <div class="form-group">
+      {{ form.preference.label(class="form-label") }}
+      {{ form.preference(class="form-control") }}
+    </div>
+    
+    {{ form.submit(class="btn btn-primary") }}
+  </form>
+
+
+ 
+
+        {% if show_result %}
+    <div class="result-column" >
+      <div class="card shadow result-card">
+        {% if route %}
+             <h3 style="color: navy">Optimised Route</h3>
+             <p><strong>From: </strong>{{ source }}</p>
+             <p><strong>To: </strong>{{ destination }}</p>
+             <p><strong>Preference: </strong>{{ preference.title()}}</p>
+             <p><strong>Smart Route </strong>{{ route| join(" → ")}}</p>
+        
+        <p>
+        <strong>Min. {{ preference.title() }}:</strong>
+        {% if preference == 'time' %}
+          {{ cost }} mins
+        {% elif preference == 'distance' %}
+          {{ cost }} km
+        {% elif preference == 'toll' %}
+          ₹{{ cost }}
+        {% else %}
+          {{ cost }}
+        {% endif %}
+        </p>
+
+      
+        <p><strong>Total Toll on this path:</strong> ₹{{ total_toll }}</p>
+          {% else %}
+          <p><strong>No route is available between these cities </strong></p>
+        {% endif %}
+        <br>
+        <div class="Comparison-class">
+        <a href="{{ url_for('Show_all_results') }}" class="btn btn-outline-info mt-2">View Full Comparison</a>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+
+</div>
+
+
+    <script src="{{ url_for('static', filename='js/city-search.js') }}"></script>
+    </body>
+{% endblock %}

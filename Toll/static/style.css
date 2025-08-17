@@ -1,0 +1,439 @@
+      body{
+        background-color: aliceblue;
+        font-family: 'Seogoe UI',sans-serif;
+        color: dimgray
+    }
+    
+  input[type='text']{
+    border:1px solid lightgray;
+    padding:10px;
+    border-radius:5px;
+    width: 100%;
+    background-color: white;
+  }
+  
+  button{
+    background-color: royalblue;
+    color: white;
+    padding: 10px 20px;
+    font-weight:bold;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;}
+
+  button:hover{
+    background-color: mediumblue;
+  }
+
+    .site-brand{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left :20px;
+    }
+    .navbar {
+        display:flex;
+        justify-content: space-between;
+        padding: 12px 30px;
+        align-items: center;
+        background-color:navy;
+        color:white;
+
+     }
+
+
+   .site-title {
+    color:white;
+    font-weight: bold;
+    font-size: 2.5em;
+    margin-right: 20px;
+   }
+
+    .nav-links a {
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    margin-left:15px;
+   
+    }
+    .nav-links a:hover{
+        color:blue;
+    }
+    .site-icon {
+     color:white; /* Dark gray */
+     font-size: 2rem;
+     margin-left: 20px;
+     
+    }
+
+    .site-icon:hover {
+    color: #007bff; /* Match your title's blue */
+    }
+    
+    .centered-typewriter{
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        
+    }
+    
+    
+    
+    .typewriter{
+        overflow: hidden;
+        border-right: 2px solid white;
+        white-space: nowrap;
+        animation: typing 3.5s steps(20),blink 0.5s step-end infinite ;
+        width: fit-content;
+        margin: 0;
+        font-weight: bold;
+        font-size: 2.5rem;
+        color: black;
+        
+        
+    }
+
+
+.result-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.result-card {
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  padding: 30px 40px;
+  width: 500px;
+  text-align: left;
+  margin-bottom: 30px;
+}
+
+.result-card h3 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.result-card p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.comparison-btn {
+  text-align: center;
+  margin-bottom: 80px;
+}
+
+.btn-outline-info {
+  padding: 10px 25px;
+  font-size: 16px;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+    @keyframes typing{
+        from{max-width : 0;}
+        to{ max-width :100%;}
+    }
+
+    @keyframes blink{
+        50% {border-color: transparent;}
+    }
+
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.card-list .card-item {
+    background: #F7DFF5;
+    padding: 26px;
+    border-radius: 8px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.04);
+    list-style: none;
+    cursor: pointer;
+    text-decoration: none;
+    border: 2px solid transparent;
+    transition: border 0.5s ease;
+    
+}
+.card-list .card-item:hover {
+    border: 2px solid #000;
+}
+
+.card-list span {
+    display: inline-block;
+    background: #F7DFF5;
+    margin-top: 32px;
+    padding: 8px 15px;
+    font-size: 0.75rem;
+    border-radius: 50px;
+    font-weight: 600;
+    
+}
+.card-list .developer {
+    background-color: #F7DFF5; 
+    color: #B22485;
+}   
+ 
+.card-list .designer {
+    background-color: #d1e8ff;
+    color: #2968a8;
+}
+.card-list .editor {
+    background-color: #d6f8d6; 
+    color: #205c20;
+}
+.card-item h5 {
+    color: #000;
+    font-size: 1.438rem;
+    margin-top: 28px;
+    font-weight: 600;
+}
+.card-list.card-item{
+    background: #F7DFF5;
+}
+@media (max-width: 1200px) {
+    .card-list .card-item {
+        padding: 15px;
+    }
+}
+@media screen and (max-width: 980px) {
+    .card-list {
+        margin: 0 auto;
+    }
+  }
+.card-list {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 40px;
+  background: #f0f8ff;
+}
+
+/* Card box styling */
+.card {
+  width: 300px;
+  height: 300px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgb(14, 0, 41);
+  transition: transform 0.3s;
+}
+
+/* Hover effect */
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Badge (label) styling */
+.badge {
+  display: inline-block;
+  padding: 8px 14px;
+  margin-top: 20px;
+  font-size: 0.8rem;
+  border-radius: 50px;
+  font-weight: bold;
+}
+
+/* Individual card colors */
+.pink-card {
+  background-color: #f7dff5;
+}
+.green-card {
+  background-color: #d6f8d6;
+}
+.blue-card {
+  background-color: #d1e8ff;
+}
+
+/* Badge colors */
+.developer {
+  background: #b22485;
+  color: #f7dff5;
+}
+.editor {
+  background:#2968a8;
+  color: #d1e8ff;
+}
+.designer {
+  background:  #205c20;
+  color: #d6f8d6;
+}
+.main-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.form-column {
+  flex: 1;
+  min-width:350px;
+  max-width: 600px;
+}
+.form-column h2{
+  font-size:28px;
+  font-weight: bold;
+  margin-bottom: 30px;
+}
+
+.result-column {
+  flex: 1;
+  max-width: 500px;
+}
+
+.result-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.1);
+  min-height: 450px;
+  min-width: 400px;
+}
+.hero-section {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.form-control {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: Arial, sans-serif;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  min-height: 48px;
+  line-height: 1.5;
+  background-color: white;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
+   box-sizing: border-box;
+}
+
+.btn-primary {
+  background-color: grey;
+  color: white;
+  
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.navbar {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.nav-link {
+  
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #7fdbff !important;  /* Light blue hover color */
+  transform: translateY(-2px);
+}
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(https://example.com/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(https://example.com/MaterialIcons-Regular.woff2) format('woff2'),
+    url(https://example.com/MaterialIcons-Regular.woff) format('woff'),
+    url(https://example.com/MaterialIcons-Regular.ttf) format('truetype');
+}
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+.icon-white {
+  color: white;
+  font-size: 24px;
+  transition: color 0.3s ease;
+}
+
+.icon-white:hover {
+  color: #6ec1ff;
+}
+
+/* Force white text in navbar and proper hover effects */
+.navbar {
+  color: white !important;
+}
+
+.navbar a.nav-link {
+  color: white !important;
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Space between icon and text */
+  transition: color 0.3s ease;
+}
+
+.navbar a.nav-link:hover,
+.navbar a.nav-link:hover span {
+  color: #6ec1ff !important;
+}
+
+/* Style the hybrid input */
+.city-search {
+    background-image: url('data:image/svg+xml;utf8,<svg...>');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 30px;
+}
+
+/* Style the dropdown suggestions */
+datalist {
+    display: none; /* Hidden by default */
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.city-search:focus-within + datalist {
+    display: block; /* Show when focused */
+}
+
