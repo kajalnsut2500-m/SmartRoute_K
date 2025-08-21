@@ -1,0 +1,353 @@
+{% extends 'base.html' %}
+{% block title%}
+Technology - Smart Route
+{% endblock %}
+
+{% block content%}
+<style>
+body {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+  font-family: 'Inter', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-banner {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="tech" patternUnits="userSpaceOnUse" width="40" height="40"><circle cx="20" cy="20" r="2" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100%" height="100%" fill="url(%23tech)"/></svg>');
+  background-size: cover;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  opacity: 0.9;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.section-intro {
+  font-size: 18px;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 60px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-bottom: 80px;
+}
+
+.tech-category {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.tech-category:hover {
+  transform: translateY(-5px);
+}
+
+.category-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.tech-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: background 0.3s ease;
+}
+
+.tech-item:hover {
+  background: #e2e8f0;
+}
+
+.tech-icon {
+  font-size: 24px;
+  margin-right: 15px;
+  width: 30px;
+}
+
+.tech-content {
+  flex: 1;
+}
+
+.tech-name {
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 5px;
+}
+
+.tech-description {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.algorithms-section {
+  background: white;
+  border-radius: 20px;
+  padding: 60px 40px;
+  margin: 40px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.algorithm-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.algorithm-card {
+  background: #f8fafc;
+  padding: 30px 25px;
+  border-radius: 15px;
+  text-align: center;
+  border-left: 4px solid #3b82f6;
+}
+
+.algorithm-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.algorithm-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.algorithm-desc {
+  font-size: 14px;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.closing-section {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  text-align: center;
+  padding: 80px 40px;
+  border-radius: 20px;
+  margin: 40px 0;
+}
+
+.closing-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.closing-text {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.cta-button {
+  background: white;
+  color: #1e3a8a;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .tech-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .algorithm-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<!-- Hero Section -->
+<div class="hero-banner">
+  <h1 class="hero-title">About Smart Route</h1>
+  <p class="hero-subtitle">Powered by modern web technologies for smarter travel planning</p>
+</div>
+
+<!-- Technology Stack Overview -->
+<div class="section">
+  <h2 class="section-title">Technologies We Use</h2>
+  <p class="section-intro">Smart Route is built using cutting-edge tools to ensure speed, accuracy, and scalability.</p>
+
+  <div class="tech-grid">
+    <!-- Frontend Technologies -->
+    <div class="tech-category">
+      <h3 class="category-title">Frontend Technologies</h3>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🖥️</div>
+        <div class="tech-content">
+          <div class="tech-name">HTML5 & CSS3</div>
+          <div class="tech-description">Clean, responsive design with modern web standards</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🎨</div>
+        <div class="tech-content">
+          <div class="tech-name">JavaScript & UI Libraries</div>
+          <div class="tech-description">Interactive and animated UI components from Uiverse.io</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🖌️</div>
+        <div class="tech-content">
+          <div class="tech-name">Figma Design</div>
+          <div class="tech-description">UI/UX mockups and prototyping before development</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Backend Technologies -->
+    <div class="tech-category">
+      <h3 class="category-title">Backend Technologies</h3>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🐍</div>
+        <div class="tech-content">
+          <div class="tech-name">Python Flask Framework</div>
+          <div class="tech-description">Handles route calculations and server logic efficiently</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">📡</div>
+        <div class="tech-content">
+          <div class="tech-name">REST APIs</div>
+          <div class="tech-description">Google Maps & OpenStreetMap for live route and toll data</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🗂️</div>
+        <div class="tech-content">
+          <div class="tech-name">Python Caching</div>
+          <div class="tech-description">Faster response times and reduced API calls</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Database & Deployment -->
+    <div class="tech-category">
+      <h3 class="category-title">Database & Deployment</h3>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🗃️</div>
+        <div class="tech-content">
+          <div class="tech-name">SQLite Database</div>
+          <div class="tech-description">Stores routes, toll data, and user preferences</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">☁️</div>
+        <div class="tech-content">
+          <div class="tech-name">Cloud Deployment</div>
+          <div class="tech-description">Heroku, AWS, or PythonAnywhere hosting solutions</div>
+        </div>
+      </div>
+      
+      <div class="tech-item">
+        <div class="tech-icon">🔒</div>
+        <div class="tech-content">
+          <div class="tech-name">GitHub Version Control</div>
+          <div class="tech-description">Collaboration and code management</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Algorithms Section -->
+<div class="section">
+  <div class="algorithms-section">
+    <h2 class="section-title">Core Algorithms</h2>
+    <div class="algorithm-grid">
+      <div class="algorithm-card">
+        <div class="algorithm-icon">📊</div>
+        <div class="algorithm-name">Floyd-Warshall Algorithm</div>
+        <div class="algorithm-desc">Calculates shortest paths between all cities for comprehensive route optimization</div>
+      </div>
+      
+      <div class="algorithm-card">
+        <div class="algorithm-icon">⚡</div>
+        <div class="algorithm-name">Graph Data Structures</div>
+        <div class="algorithm-desc">Efficiently represents roads, tolls, and distances for fast computation</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Closing Section -->
+<div class="section">
+  <div class="closing-section">
+    <h2 class="closing-title">Why These Technologies?</h2>
+    <p class="closing-text">We chose this stack for reliability, scalability, and performance. Smart Route is built to handle real-world travel data while staying simple for users.</p>
+    <a href="{{ url_for('SmartRoute') }}" class="cta-button">Explore Smart Route</a>
+  </div>
+</div>
+
+{% endblock %}

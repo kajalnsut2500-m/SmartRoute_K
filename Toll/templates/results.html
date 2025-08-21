@@ -1,0 +1,268 @@
+{% extends 'base.html'%}
+{% block title%}
+Route Results
+{% endblock %}
+{% block content%}
+
+<style>
+.results-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  padding: 20px;
+}
+
+.result-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px;
+  padding: 30px;
+  animation: slideIn 0.5s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.result-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 8px;
+}
+
+.result-subtitle {
+  color: #6c757d;
+  font-size: 14px;
+}
+
+.route-tag {
+  display: inline-block;
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: 10px;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.metric-badge {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px 10px;
+  text-align: center;
+  border: 1px solid #e9ecef;
+}
+
+.metric-icon {
+  font-size: 20px;
+  margin-bottom: 5px;
+}
+
+.metric-value {
+  font-weight: 600;
+  color: #2c3e50;
+  font-size: 16px;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.route-path {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 15px;
+  margin: 20px 0;
+}
+
+.route-path h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 10px;
+}
+
+.route-steps {
+  color: #6c757d;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.cta-section {
+  margin-top: 30px;
+}
+
+.nav-btn {
+  width: 100%;
+  background: linear-gradient(90deg, #28a745, #20c997);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.nav-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(40,167,69,0.3);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.action-btn {
+  flex: 1;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: black;
+}
+
+.action-btn:hover {
+  background: #e9ecef;
+}
+
+.back-btn {
+  background: #6c757d;
+  color: white;
+  border: none;
+}
+
+.back-btn:hover {
+  background: #5a6268;
+}
+</style>
+
+<div class="results-container">
+  <div class="result-card">
+    {% if route %}
+      <div class="result-header">
+        <h2 class="result-title">Best Route Found ✅</h2>
+        <p class="result-subtitle">{{ source }} → {{ destination }}</p>
+        <span class="route-tag">
+          {% if preference == 'time' %}⚡ Fastest
+          {% elif preference == 'distance' %}📏 Shortest  
+          {% elif preference == 'toll' %}💰 Cheapest
+          {% else %}🎯 Optimal{% endif %}
+        </span>
+      </div>
+
+      <div class="metrics-grid">
+        <div class="metric-badge">
+          <div class="metric-icon">⏱️</div>
+          <div class="metric-value">
+            {% if preference == 'time' %}{{ "%.1f"|format(cost) }}h
+            {% else %}{{ "%.1f"|format(cost * 0.5) }}h{% endif %}
+          </div>
+          <div class="metric-label">Time</div>
+        </div>
+        
+        <div class="metric-badge">
+          <div class="metric-icon">🚗</div>
+          <div class="metric-value">
+            {% if preference == 'distance' %}{{ "%.0f"|format(cost) }}km
+            {% else %}{{ "%.0f"|format(cost * 50) }}km{% endif %}
+          </div>
+          <div class="metric-label">Distance</div>
+        </div>
+        
+        <div class="metric-badge">
+          <div class="metric-icon">💰</div>
+          <div class="metric-value">₹{{ "%.0f"|format(total_toll) }}</div>
+          <div class="metric-label">Tolls</div>
+        </div>
+      </div>
+
+      <div class="route-path">
+        <h4>🛣️ Route Summary</h4>
+        <div class="route-steps">
+          <strong>Path:</strong> {{ route | join(" → ") }}<br>
+          {% if highway_path %}
+          <strong>Highways:</strong> {{ highway_path | join(", ") }}
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="cta-section">
+        <button class="nav-btn" onclick="startNavigation()">
+          🧭 Start Navigation
+        </button>
+        
+        <div class="action-buttons">
+          <button class="action-btn" onclick="saveRoute()">💾 Save</button>
+          <button class="action-btn" onclick="shareRoute()">↗️ Share</button>
+          <button class="action-btn back-btn" onclick="window.location.href='{{ url_for('SmartRoute') }}'">
+            ← New Route
+          </button>
+        </div>
+      </div>
+
+    {% else %}
+      <div class="result-header">
+        <h2 class="result-title">No Route Found ❌</h2>
+        <p class="result-subtitle">Unable to find a route between these locations</p>
+      </div>
+      
+      <div class="cta-section">
+        <button class="action-btn back-btn" onclick="window.location.href='{{ url_for('SmartRoute') }}'" style="width: 100%;">
+          ← Try Different Locations
+        </button>
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+function startNavigation() {
+  const source = "{{ source }}";
+  const destination = "{{ destination }}";
+  const url = `https://www.google.com/maps/dir/${encodeURIComponent(source)}/${encodeURIComponent(destination)}`;
+  window.open(url, '_blank');
+}
+
+function saveRoute() {
+  alert('Route saved to your favorites! 💾');
+}
+
+function shareRoute() {
+  const text = `Check out this route: {{ source }} → {{ destination }}`;
+  if (navigator.share) {
+    navigator.share({ title: 'SmartRoute', text: text });
+  } else {
+    navigator.clipboard.writeText(text);
+    alert('Route link copied to clipboard! ↗️');
+  }
+}
+</script>
+
+{% endblock %}

@@ -13,6 +13,7 @@ import logging
 from Toll import gmaps
 from .map_service import get_route_details
 from Toll.build_matrix import build_matrix
+from Toll.direct_routing import get_direct_route, should_use_direct_routing
 from flask import jsonify
 
 logger = logging.getLogger(__name__)
@@ -22,9 +23,20 @@ logger = logging.getLogger(__name__)
 
 @app.route('/')
 @app.route('/home')
-@login_required
 def home_page():
-    return render_template('home.html')
+    return render_template('route_options.html')
+
+@app.route('/options')
+def route_options():
+    return render_template('route_options.html')
+
+@app.route('/about')
+def about_page():
+    return render_template('about.html')
+
+@app.route('/technology')
+def technology_page():
+    return render_template('technology.html')
 @app.route('/get_the_route', methods=['GET', 'POST'])
 @login_required
 def SmartRoute():
@@ -38,81 +50,100 @@ def SmartRoute():
 
     if form.validate_on_submit():
         source = form.source.data.strip().title()
-        logger.debug(f"Source: {source}")
-        preference = form.preference.data
-        logger.debug(f"Preference: {preference}")
-
-        matrix_data, cities = build_matrix(preference)
-        logger.debug(f"Matrix data sample: {matrix_data[0][:3] if len(matrix_data) > 0 else 'Empty'}")
-        logger.debug(f"Cities from matrix: {cities}")
-        
         destination = form.destination.data.strip().title()
-
-        if source not in cities or destination not in cities:
-            flash("Invalid Source or Destination", "danger")
-            return redirect(url_for('SmartRoute'))
-        fw = floyd_warshall(matrix_data)
-
-        src_idx = cities.index(source)
-        dest_idx = cities.index(destination)
+        preference = form.preference.data
         
-        # Get shortest path using Floyd-Warshall result
-        dist_matrix, next_matrix = fw
-        cost = dist_matrix[src_idx][dest_idx]
-        
-        if cost >= float('inf'):
-            flash("No path found between the selected cities.", "danger")
-            return redirect(url_for('SmartRoute'))
+        # Use direct routing (1 API call vs 28+ with Floyd-Warshall)
+        if should_use_direct_routing(source, destination):
+            direct_route_data = get_direct_route(source, destination, preference)
             
-        route = reconstruct_path(src_idx, dest_idx, next_matrix, cities)
-        
-        # Get detailed route steps from Google Maps
-        detailed_steps = []
-        if len(route) >= 2:
-            directions = get_route_steps(route[0], route[-1])
-            if directions and 'legs' in directions:
-                for leg in directions['legs']:
-                    if 'steps' in leg:
-                        for step in leg['steps']:
-                            if 'html_instructions' in step:
-                                road_info = extract_road_name(step['html_instructions'])
-                                detailed_steps.append(road_info)
-        
-        # Calculate toll based on distance if not toll preference
-        total_toll = 0
-        if preference == 'toll':
-            total_toll = cost  # Already calculated toll cost
+            if direct_route_data:
+                route = direct_route_data['route']
+                cost = direct_route_data.get('distance_km', 0) if preference == 'distance' else direct_route_data.get('duration_hours', 0) if preference == 'time' else direct_route_data.get('toll_cost', 0)
+                total_toll = direct_route_data.get('toll_cost', 0)
+                highway_path = direct_route_data.get('highways', [])
+                flash(f"✅ Direct route via {direct_route_data.get('route_summary', 'optimal path')}", "success")
+            else:
+                flash("⚠️ Using offline estimates", "warning")
+                from Toll.static_data import get_matrix
+                matrix_data, cities = get_matrix(preference)
+                if source in cities and destination in cities:
+                    src_idx = cities.index(source)
+                    dest_idx = cities.index(destination)
+                    cost = matrix_data[src_idx][dest_idx]
+                    route = [source, destination]
+                    total_toll = get_matrix('toll')[0][src_idx][dest_idx] if preference != 'toll' else cost
+                    highway_path = ["NH48"]
+                else:
+                    flash("Route not found", "danger")
+                    return redirect(url_for('SmartRoute'))
         else:
-            # Estimate toll based on distance (avoid extra API calls)
-            for i in range(len(route) - 1):
-                from_idx = cities.index(route[i])
-                to_idx = cities.index(route[i + 1])
-                # Use distance from existing matrix to estimate toll
-                if not np.isinf(matrix_data[from_idx][to_idx]):
-                    total_toll += matrix_data[from_idx][to_idx] * 2.5  # ₹2.5 per km estimate
+            # Fallback to Floyd-Warshall
+            flash("⚠️ Using offline estimates", "warning")
+            matrix_data, cities = build_matrix(preference)
             
-        show_result = True
+            if source not in cities or destination not in cities:
+                flash("Invalid Source or Destination", "danger")
+                return redirect(url_for('SmartRoute'))
+                
+            fw = floyd_warshall(matrix_data)
+            src_idx = cities.index(source)
+            dest_idx = cities.index(destination)
+            
+            dist_matrix, next_matrix = fw
+            cost = dist_matrix[src_idx][dest_idx]
+            
+            if cost >= float('inf'):
+                flash("No path found between the selected cities.", "danger")
+                return redirect(url_for('SmartRoute'))
+                
+            route = reconstruct_path(src_idx, dest_idx, next_matrix, cities)
+        
+            # Handle toll calculation for Floyd-Warshall fallback
+            total_toll = 0
+            highway_path = []
+            if preference == 'toll':
+                total_toll = cost
+            else:
+                toll_matrix, _ = build_matrix('toll')
+                for i in range(len(route) - 1):
+                    from_idx = cities.index(route[i])
+                    to_idx = cities.index(route[i + 1])
+                    if from_idx < len(toll_matrix) and to_idx < len(toll_matrix[from_idx]):
+                        segment_toll = toll_matrix[from_idx][to_idx]
+                        if segment_toll != float('inf'):
+                            total_toll += segment_toll
+            
+            # Get highway names for Floyd-Warshall route
+            if len(route) >= 2:
+                directions = get_route_steps(route[0], route[-1])
+                if directions and 'legs' in directions:
+                    for leg in directions['legs']:
+                        if 'steps' in leg:
+                            for step in leg['steps']:
+                                if 'html_instructions' in step:
+                                    highway = extract_highway_name(step['html_instructions'])
+                                    if highway and highway not in highway_path:
+                                        highway_path.append(highway)
+            
+        # Redirect to results page
+        return render_template(
+            'results.html',
+            route=route,
+            highway_path=highway_path if 'highway_path' in locals() else [],
+            cost=cost,
+            source=source,
+            destination=destination,
+            total_toll=total_toll,
+            preference=preference
+        )
 
-    return render_template(
-        'input.html',
-        show_result=show_result,
-        form=form,
-        route=route,
-        detailed_steps=detailed_steps if 'detailed_steps' in locals() else [],
-        cost=cost,
-        source=source,
-        destination=destination,
-        total_toll=total_toll,
-        preference=form.preference.data if form.preference.data else ''
-    )
+    return render_template('input.html', form=form)
 
 
 
 
-@app.route('/show_all_details')
-@login_required
-def Show_all_results():
-    return render_template('show_all_results.html')
+
 
 
 def extract_road_name(html_instruction):
@@ -120,6 +151,29 @@ def extract_road_name(html_instruction):
     clean_text = re.sub('<[^<]+?>', '', html_instruction)  # Remove HTML tags
     road_match = re.search(r'(?:Take|Continue on|Merge onto)\s+(.*?)\s+(?:toward|to|via)', clean_text)
     return road_match.group(1).strip() if road_match else clean_text
+
+def extract_highway_name(html_instruction):
+    """Extract highway names like NH48, NH44, etc. from Google Maps instructions"""
+    # Remove HTML tags
+    clean_text = re.sub('<[^<]+?>', '', html_instruction)
+    
+    # Look for highway patterns: NH, SH, AH followed by numbers
+    highway_patterns = [
+        r'\b(NH\s*\d+[A-Z]?)\b',  # National Highway: NH48, NH44
+        r'\b(SH\s*\d+[A-Z]?)\b',  # State Highway: SH1, SH2
+        r'\b(AH\s*\d+[A-Z]?)\b',  # Asian Highway: AH1, AH2
+        r'\b(Mumbai[- ]Pune\s*Expressway)\b',  # Named expressways
+        r'\b(Delhi[- ]Mumbai\s*Expressway)\b',
+        r'\b(Yamuna\s*Expressway)\b',
+        r'\b(Agra[- ]Lucknow\s*Expressway)\b'
+    ]
+    
+    for pattern in highway_patterns:
+        match = re.search(pattern, clean_text, re.IGNORECASE)
+        if match:
+            return match.group(1).strip()
+    
+    return None
 
 @login_required
 def get_route_steps(origin, destination):

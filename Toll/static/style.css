@@ -35,10 +35,26 @@
         justify-content: space-between;
         padding: 12px 30px;
         align-items: center;
-        background-color:navy;
+        background-color: #001f3f;
         color:white;
 
      }
+
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .nav-left a {
+        color: white;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .nav-left a:hover {
+        color: #6ec1ff;
+    }
 
 
    .site-title {
@@ -56,7 +72,7 @@
    
     }
     .nav-links a:hover{
-        color:blue;
+        color: #6ec1ff;
     }
     .site-icon {
      color:white; /* Dark gray */
@@ -388,7 +404,7 @@
 }
 .icon-white {
   color: white;
-  font-size: 24px;
+  font-size: 18px;
   transition: color 0.3s ease;
 }
 

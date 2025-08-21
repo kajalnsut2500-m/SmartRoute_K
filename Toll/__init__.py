@@ -5,7 +5,10 @@ from flask_bcrypt import Bcrypt
 from flask_login import LoginManager
 import os
 from googlemaps import Client
-load_dotenv()
+
+# Load environment variables from the correct path
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+load_dotenv()  # Also try loading from current directory
 app = Flask(__name__)
 
 

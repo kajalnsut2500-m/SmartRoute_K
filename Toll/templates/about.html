@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% block title%}
+About Us - Smart Route
+{% endblock %}
+
+{% block content%}
+<style>
+body {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+  font-family: 'Inter', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-banner {
+  background: linear-gradient(135deg, rgba(30, 58, 138, 0.9), rgba(59, 130, 246, 0.8)), url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path fill="%23f0f9ff" d="M0,300L48,280C96,260,192,220,288,200C384,180,480,180,576,190C672,200,768,220,864,210C960,200,1056,160,1152,150L1200,140L1200,600L1152,600C1056,600,960,600,864,600C768,600,672,600,576,600C480,600,384,600,288,600C192,600,96,600,48,600L0,600Z"/></svg>');
+  background-size: cover;
+  background-position: center;
+  color: white;
+  text-align: center;
+  padding: 100px 20px;
+}
+
+.hero-title {
+  font-size: 48px;
+  font-weight: 800;
+  margin-bottom: 20px;
+}
+
+.hero-subtitle {
+  font-size: 20px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.breadcrumb {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.breadcrumb a {
+  color: white;
+  text-decoration: none;
+}
+
+.section {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 80px 20px;
+}
+
+.story-section {
+  text-align: center;
+}
+
+.section-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 40px;
+}
+
+.story-text {
+  font-size: 18px;
+  line-height: 1.8;
+  color: #4b5563;
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 40px;
+  margin-top: 60px;
+}
+
+.feature-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-10px);
+}
+
+.feature-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+}
+
+.feature-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+}
+
+.feature-description {
+  font-size: 16px;
+  color: #6b7280;
+  line-height: 1.6;
+}
+
+.value-section {
+  background: white;
+  border-radius: 20px;
+  padding: 60px 40px;
+  margin: 40px 0;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  margin-top: 40px;
+}
+
+.value-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 15px;
+}
+
+.value-icon {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.value-text {
+  font-size: 16px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.team-section {
+  text-align: center;
+}
+
+.team-card {
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.team-avatar {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  color: white;
+}
+
+.team-name {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+.team-role {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 15px;
+}
+
+.team-description {
+  font-size: 14px;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.cta-section {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  text-align: center;
+  padding: 80px 40px;
+  border-radius: 20px;
+  margin: 40px 0;
+}
+
+.cta-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.cta-text {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.cta-button {
+  background: white;
+  color: #1e3a8a;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 36px;
+  }
+  
+  .section {
+    padding: 60px 20px;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+</style>
+
+<!-- Hero Section -->
+<div class="hero-banner">
+  <div class="breadcrumb">
+    <a href="{{ url_for('home_page') }}">Home</a> > About Us
+  </div>
+  <h1 class="hero-title">About Smart Route</h1>
+  <p class="hero-subtitle">Powered by modern web technologies for smarter travel planning</p>
+</div>
+
+<!-- Technology Overview Section -->
+<div class="section story-section">
+  <h2 class="section-title">Technologies We Use</h2>
+  <p class="story-text">
+    Smart Route is built using cutting-edge tools to ensure speed, accuracy, and scalability. Our technology stack combines modern web frameworks with powerful algorithms to deliver optimal route planning.
+  </p>
+  <p class="story-text">
+    From responsive frontend design using HTML5, CSS3, and JavaScript to robust backend processing with Python Flask, every component is carefully chosen for performance and reliability.
+  </p>
+  <p class="story-text">
+    We integrate with Google Maps APIs for real-time data while using advanced algorithms like Floyd-Warshall for comprehensive route optimization, ensuring you get the best travel recommendations every time.
+  </p>
+</div>
+
+<!-- Core Technologies Section -->
+<div class="section">
+  <h2 class="section-title" style="text-align: center;">Core Technologies</h2>
+  <div class="features-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🐍</div>
+      <h3 class="feature-title">Python Flask Backend</h3>
+      <p class="feature-description">Robust server-side processing with Flask framework handling route calculations, API integrations, and database operations efficiently.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">📊</div>
+      <h3 class="feature-title">Floyd-Warshall Algorithm</h3>
+      <p class="feature-description">Advanced graph algorithms that calculate optimal paths between all cities, ensuring comprehensive route optimization for every journey.</p>
+    </div>
+    
+    <div class="feature-card">
+      <div class="feature-icon">📡</div>
+      <h3 class="feature-title">Google Maps Integration</h3>
+      <p class="feature-description">Real-time data integration with Google Maps APIs providing live traffic, toll information, and accurate route details.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Why Choose Us Section -->
+<div class="section">
+  <div class="value-section">
+    <h2 class="section-title">Why Travelers Trust Smart Route</h2>
+    <div class="value-grid">
+      <div class="value-item">
+        <div class="value-icon">🚀</div>
+        <div class="value-text">Fast and accurate route calculations</div>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">🌍</div>
+        <div class="value-text">Covers all major Indian highways and cities</div>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">🔒</div>
+        <div class="value-text">Secure and reliable platform</div>
+      </div>
+      
+      <div class="value-item">
+        <div class="value-icon">💡</div>
+        <div class="value-text">Constantly improving with user feedback</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Team Section -->
+<div class="section team-section">
+  <h2 class="section-title">Meet the Team</h2>
+  <div class="team-card">
+    <div class="team-avatar">👩‍💻</div>
+    <h3 class="team-name">Kajal Maurya</h3>
+    <p class="team-role">Full-Stack Developer</p>
+    <p class="team-description">
+      Built with passion by a dedicated developer who believes in making travel smarter and more efficient for everyone. Combining technical expertise with real-world travel insights.
+    </p>
+  </div>
+</div>
+
+<!-- Call to Action Section -->
+<div class="section">
+  <div class="cta-section">
+    <h2 class="cta-title">Why These Technologies?</h2>
+    <p class="cta-text">We chose this stack for reliability, scalability, and performance. Smart Route is built to handle real-world travel data while staying simple for users.</p>
+    <a href="{{ url_for('technology_page') }}" class="cta-button">Explore Our Tech Stack</a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,395 @@
+{% extends 'base.html'%}
+{% block title%}
+Route Options
+{% endblock %}
+{% block content%}
+
+<style>
+body {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f8f9fa 100%);
+  font-family: 'Inter', 'Roboto', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.options-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+.route-card {
+  background: white;
+  border-radius: 20px;
+  padding: 40px 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.route-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+}
+
+.card-icon {
+  font-size: 60px;
+  margin-bottom: 20px;
+  display: block;
+}
+
+.card-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.card-description {
+  font-size: 16px;
+  color: #6c757d;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.card-button {
+  width: 100%;
+  padding: 15px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.shortest-btn {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  color: white;
+}
+
+.shortest-btn:hover {
+  background: linear-gradient(135deg, #0056b3, #004085);
+  transform: translateY(-2px);
+}
+
+.toll-btn {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
+}
+
+.toll-btn:hover {
+  background: linear-gradient(135deg, #1e7e34, #155724);
+  transform: translateY(-2px);
+}
+
+.fastest-btn {
+  background: linear-gradient(135deg, #6f42c1, #5a2d91);
+  color: white;
+}
+
+.fastest-btn:hover {
+  background: linear-gradient(135deg, #5a2d91, #4c1d7a);
+  transform: translateY(-2px);
+}
+
+.hero-section {
+  text-align: flex-start;
+  padding-top: 20px;
+  margin-top:20px;
+  margin-bottom: 40px;
+}
+
+.hero-title {
+  font-size: 42px;
+  font-weight: bold;
+  color: #1e3a8a;
+  margin-bottom: 15px;
+  line-height: 1.2;
+  min-height: 60px;
+}
+
+.typewriter {
+  display: inline-block;
+}
+
+
+
+.hero-subtitle {
+  font-size: 18px;
+  color: #6c757d;
+  margin-bottom: 0;
+  line-height: 1.5;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.why-section {
+  margin-top: 80px;
+  text-align: center;
+}
+
+.why-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1e3a8a;
+  margin-bottom: 40px;
+}
+
+.why-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.why-item {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.why-item:hover {
+  transform: translateY(-5px);
+}
+
+.why-icon {
+  font-size: 24px;
+  margin-right: 15px;
+}
+
+.why-text {
+  font-size: 16px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.cta-section {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  color: white;
+  text-align: center;
+  padding: 60px 40px;
+  border-radius: 20px;
+  margin: 80px 0 40px;
+}
+
+.cta-title {
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.cta-text {
+  font-size: 18px;
+  margin-bottom: 30px;
+  opacity: 0.9;
+}
+
+.cta-button {
+  background: white;
+  color: #1e3a8a;
+  padding: 15px 40px;
+  border: none;
+  border-radius: 50px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+}
+
+.footer {
+  background: #1e3a8a;
+  color: white;
+  padding: 40px 20px;
+  margin-top: 0;
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-links {
+  margin-bottom: 20px;
+}
+
+.footer-links a {
+  color: white;
+  text-decoration: none;
+  margin: 0 20px;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 0.8;
+}
+
+.footer-copyright {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+@media (max-width: 768px) {
+  .options-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .why-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .why-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .why-icon {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  
+  .footer-links a {
+    margin: 0 10px;
+    font-size: 14px;
+  }
+}
+</style>
+
+<div class="options-container">
+  <div>
+    <div class="hero-section">
+      <h1 class="hero-title">
+        <span class="typewriter" id="typewriter"></span>
+      </h1>
+    </div>
+    
+    <div class="options-grid">
+      <!-- Shortest Route Card -->
+      <div class="route-card" onclick="selectRoute('distance')">
+        <span class="card-icon">📏</span>
+        <h3 class="card-title">Shortest Route</h3>
+        <p class="card-description">Choose the most direct routes to save fuel and reduce travel distance.</p>
+        <button class="card-button shortest-btn">Find Shortest Route</button>
+      </div>
+
+      <!-- Minimum Toll Card -->
+      <div class="route-card" onclick="selectRoute('toll')">
+        <span class="card-icon">💲</span>
+        <h3 class="card-title">Minimum Toll</h3>
+        <p class="card-description">Get the cheapest toll cost path and save money on your journey.</p>
+        <button class="card-button toll-btn">Find Minimum Toll</button>
+      </div>
+
+      <!-- Shortest Time Card -->
+      <div class="route-card" onclick="selectRoute('time')">
+        <span class="card-icon">⏱️</span>
+        <h3 class="card-title">Shortest Time</h3>
+        <p class="card-description">Save valuable hours with the fastest path to your destination.</p>
+        <button class="card-button fastest-btn">Find Fastest Route</button>
+      </div>
+    </div>
+    
+    <!-- Why Smart Route Section -->
+    <div class="why-section">
+      <h2 class="why-title">Why Smart Route?</h2>
+      <div class="why-grid">
+        <div class="why-item">
+          <span class="why-icon">✅</span>
+          <span class="why-text">Simple & easy-to-use interface</span>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">⚡</span>
+          <span class="why-text">Fast route calculations powered by Floyd-Warshall algorithm</span>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">🌍</span>
+          <span class="why-text">Works across all major Indian cities</span>
+        </div>
+        <div class="why-item">
+          <span class="why-icon">🔒</span>
+          <span class="why-text">Secure & reliable web app</span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Call to Action Section -->
+    <div class="cta-section">
+      <h2 class="cta-title">Start Your Journey Today</h2>
+      <p class="cta-text">Ready to experience smarter travel planning?</p>
+      <a href="{{ url_for('SmartRoute') }}" class="cta-button">Plan My Route</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-content">
+    <div class="footer-links">
+      <a href="{{ url_for('home_page') }}">Home</a>
+      <a href="{{ url_for('SmartRoute') }}">Smart Route</a>
+      <a href="{{ url_for('about_page') }}">About Us</a>
+      <a href="#">Contact</a>
+    </div>
+    <div class="footer-copyright">
+      <p>Copyright © 2025 Smart Route</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Typewriter effect
+const text = "Your Intelligent Toll and Route Planner";
+const typewriter = document.getElementById('typewriter');
+let i = 0;
+
+function typeEffect() {
+  if (i < text.length) {
+    typewriter.textContent += text.charAt(i);
+    i++;
+    setTimeout(typeEffect, 80);
+  }
+}
+
+// Start typewriter effect when page loads
+window.addEventListener('load', function() {
+  setTimeout(typeEffect, 500);
+});
+
+function selectRoute(preference) {
+  // Store the preference and redirect to input form
+  sessionStorage.setItem('routePreference', preference);
+  window.location.href = "{{ url_for('SmartRoute') }}";
+}
+</script>
+
+{% endblock %}
