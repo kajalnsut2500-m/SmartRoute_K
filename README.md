@@ -11,7 +11,9 @@
 ![Home Features](screenshots/Screenshot%202026-06-06%20at%206.43.22%20PM.png)
 
 ### 🔐 Login & Authentication
-![Login Page](screenshots/Screenshot%202026-06-06%20at%206.43.44%20PM.png)
+<img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/4342a431-d057-4d81-89ef-f2fe52a69d2e" />
+<img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/4289a139-8e0d-4cd7-aaeb-80f9201d00aa" />
+
 
 ### 🗺️ Plan Your Route
 ![Route Planner](screenshots/Screenshot%202026-06-06%20at%206.45.08%20PM.png)
