@@ -7,17 +7,16 @@
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home Page](screenshots/Screenshot%202026-06-06%20at%206.43.33%20PM.png)
-![Home Features](screenshots/Screenshot%202026-06-06%20at%206.43.22%20PM.png)
+<img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/fd8af9ae-f457-4bdd-8240-e5d6fc0f84fe" /><img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/c4bc59ab-4af3-4fef-9ac2-828acb301d94" />
 
 ### 🔐 Login & Authentication
 <img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/4342a431-d057-4d81-89ef-f2fe52a69d2e" />
-<img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/4289a139-8e0d-4cd7-aaeb-80f9201d00aa" />
+
 
 
 ### 🗺️ Plan Your Route
-![Route Planner](screenshots/Screenshot%202026-06-06%20at%206.45.08%20PM.png)
-![Route Options](screenshots/Screenshot%202026-06-06%20at%206.45.43%20PM.png)
+
+<img width="1469" height="791" alt="Image" src="https://github.com/user-attachments/assets/4289a139-8e0d-4cd7-aaeb-80f9201d00aa" />
 
 ### ✅ Route Results
 
