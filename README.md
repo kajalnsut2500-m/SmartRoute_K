@@ -45,6 +45,7 @@
 
 ---
 
+<<<<<<< Updated upstream
 ## 🛠️ Tech Stack
 
 | Layer | Technologies |
@@ -77,6 +78,24 @@ SmartRoute_K/
 ├── .env                    # Environment variables
 └── README.md
 ```
+=======
+## 📂 Project Structure  
+SmartRoute/
+├── app.py # Main Flask app
+├── templates/ # Jinja2 templates (HTML pages)
+├── static/ # CSS, JS, Images
+├── models.py # Database models
+├── routes.py # Flask routes & API endpoints
+├── algorithms/ # Floyd-Warshall, graph utilities
+├── users.db # SQLite database
+└── requirements.txt # Project dependencies
+
+## 🚀 How to Run
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/kajalnsut2500-m/SmartRoute_k.git
+   cd SmartRoute_k
+>>>>>>> Stashed changes
 
 ---
 
@@ -93,6 +112,7 @@ source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install dependencies
 pip install -r requirements.txt
+<<<<<<< Updated upstream
 
 # Set up environment variables
 # Add your Google Maps API key to .env
@@ -136,3 +156,6 @@ Then open `http://localhost:8000` in your browser.
 ## 📄 License
 
 This project is licensed under the MIT License.
+=======
+python app.py
+>>>>>>> Stashed changes
