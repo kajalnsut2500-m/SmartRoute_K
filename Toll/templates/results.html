@@ -182,7 +182,7 @@ Route Results
           <div class="metric-icon">⏱️</div>
           <div class="metric-value">
             {% if preference == 'time' %}{{ "%.1f"|format(cost) }}h
-            {% else %}{{ "%.1f"|format(cost * 0.5) }}h{% endif %}
+            {% else %}{{ "%.1f"|format(time_val) }}h{% endif %}
           </div>
           <div class="metric-label">Time</div>
         </div>
@@ -191,7 +191,7 @@ Route Results
           <div class="metric-icon">🚗</div>
           <div class="metric-value">
             {% if preference == 'distance' %}{{ "%.0f"|format(cost) }}km
-            {% else %}{{ "%.0f"|format(cost * 50) }}km{% endif %}
+            {% else %}{{ "%.0f"|format(dist_val) }}km{% endif %}
           </div>
           <div class="metric-label">Distance</div>
         </div>
@@ -244,9 +244,24 @@ Route Results
 
 <script>
 function startNavigation() {
-  const source = "{{ source }}";
-  const destination = "{{ destination }}";
-  const url = `https://www.google.com/maps/dir/${encodeURIComponent(source)}/${encodeURIComponent(destination)}`;
+  const source = "{{ source }}, India";
+  const destination = "{{ destination }}, India";
+  const preference = "{{ preference }}";
+  const base = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&travelmode=driving`;
+
+  let url;
+  if (preference === 'time') {
+    // Google Maps defaults to fastest — no extra param needed
+    url = base;
+  } else if (preference === 'distance') {
+    // dir_action=navigate hints at shortest-distance mode
+    url = base + '&dir_action=navigate';
+  } else {
+    // 'toll': open standard route — backend already picked the cheapest-toll option,
+    // so we do NOT pass avoid=tolls here (that would override our selection)
+    url = base;
+  }
+
   window.open(url, '_blank');
 }
 

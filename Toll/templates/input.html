@@ -88,299 +88,252 @@ Smart Route
   pointer-events: none;
 }
 
-.spinner {
+/* ── Loading overlay ── */
+#loadingOverlay {
   display: none;
-  margin-right: 10px;
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 15, 40, 0.96);
+  z-index: 9999;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 36px;
 }
 
-/* Hamster Wheel Animation */
-.wheel-and-hamster {
-  --dur: 1s;
+.loading-label {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.loading-label .dots span {
+  animation: dotBlink 1.2s ease-in-out infinite;
+  opacity: 0;
+}
+.loading-label .dots span:nth-child(2) { animation-delay: 0.2s; }
+.loading-label .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes dotBlink {
+  0%, 80%, 100% { opacity: 0; }
+  40%           { opacity: 1; }
+}
+
+/* ── Road scene ── */
+.road-scene {
+  width: 420px;
+  height: 110px;
   position: relative;
-  width: 1.5em;
-  height: 1.5em;
-  font-size: 14px;
+  overflow: hidden;
 }
 
-.wheel,
-.hamster,
-.hamster div,
-.spoke {
+.road {
   position: absolute;
-}
-
-.wheel,
-.spoke {
-  border-radius: 50%;
-  top: 0;
+  bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 48px;
+  background: #2c2c2c;
+  border-radius: 4px;
+}
+
+.road-dashes {
+  position: absolute;
+  bottom: 21px;
+  left: 0;
+  width: 200%;
+  height: 5px;
+  background: repeating-linear-gradient(
+    90deg,
+    #f0c040 0, #f0c040 32px,
+    transparent 32px, transparent 64px
+  );
+  animation: dashScroll 0.45s linear infinite;
+}
+
+@keyframes dashScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-64px); }
+}
+
+/* ── Car ── */
+.car {
+  position: absolute;
+  bottom: 44px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 65px;
+  animation: carBounce 0.45s ease-in-out infinite;
+}
+
+@keyframes carBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0px); }
+  50%       { transform: translateX(-50%) translateY(-4px); }
+}
+
+.car-body {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  width: 140px;
+  height: 36px;
+  background: linear-gradient(180deg, #e74c3c 0%, #c0392b 100%);
+  border-radius: 8px 10px 5px 5px;
+}
+
+.car-top {
+  position: absolute;
+  bottom: 44px;
+  left: 22px;
+  width: 82px;
+  height: 30px;
+  background: linear-gradient(180deg, #c0392b 0%, #a93226 100%);
+  border-radius: 8px 8px 0 0;
+}
+
+.car-window-rear {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 28px;
+  height: 17px;
+  background: #aed6f1;
+  border-radius: 4px 2px 2px 4px;
+  opacity: 0.85;
+}
+
+.car-window-front {
+  position: absolute;
+  top: 5px;
+  left: 38px;
+  width: 36px;
+  height: 17px;
+  background: #aed6f1;
+  border-radius: 2px 6px 2px 2px;
+  opacity: 0.85;
+}
+
+.headlight {
+  position: absolute;
+  right: 3px;
+  bottom: 10px;
+  width: 14px;
+  height: 8px;
+  background: #f9ca24;
+  border-radius: 3px 5px 5px 3px;
+  box-shadow: 0 0 10px 4px rgba(249, 202, 36, 0.55);
+}
+
+.taillight {
+  position: absolute;
+  left: 3px;
+  bottom: 10px;
+  width: 8px;
+  height: 8px;
+  background: #e74c3c;
+  border-radius: 2px;
+  box-shadow: 0 0 6px 2px rgba(231, 76, 60, 0.6);
 }
 
 .wheel {
-  background: radial-gradient(100% 100% at center,hsla(0,0%,60%,0) 47.8%,hsl(0,0%,60%) 48%);
-  z-index: 2;
-}
-
-.hamster {
-  animation: hamster var(--dur) ease-in-out infinite;
-  top: 50%;
-  left: calc(50% - 3.5em);
-  width: 7em;
-  height: 3.75em;
-  transform: rotate(4deg) translate(-0.8em,1.85em);
-  transform-origin: 50% 0;
-  z-index: 1;
-}
-
-.hamster__head {
-  animation: hamsterHead var(--dur) ease-in-out infinite;
-  background: hsl(30,90%,55%);
-  border-radius: 70% 30% 0 100% / 40% 25% 25% 60%;
-  box-shadow: 0 -0.25em 0 hsl(30,90%,80%) inset, 0.75em -1.55em 0 hsl(30,90%,90%) inset;
-  top: 0;
-  left: -2em;
-  width: 2.75em;
-  height: 2.5em;
-  transform-origin: 100% 50%;
-}
-
-.hamster__ear {
-  animation: hamsterEar var(--dur) ease-in-out infinite;
-  background: hsl(0,90%,85%);
+  position: absolute;
+  bottom: 0px;
+  width: 28px;
+  height: 28px;
+  background: #1a1a1a;
   border-radius: 50%;
-  box-shadow: -0.25em 0 hsl(30,90%,55%) inset;
-  top: -0.25em;
-  right: -0.25em;
-  width: 0.75em;
-  height: 0.75em;
-  transform-origin: 50% 75%;
+  border: 4px solid #666;
+  animation: wheelSpin 0.35s linear infinite;
 }
 
-.hamster__eye {
-  animation: hamsterEye var(--dur) linear infinite;
-  background-color: hsl(0,0%,0%);
+.wheel::after {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  background: #444;
   border-radius: 50%;
-  top: 0.375em;
-  left: 1.25em;
-  width: 0.5em;
-  height: 0.5em;
+  border-top: 3px solid #888;
 }
 
-.hamster__nose {
-  background: hsl(0,90%,75%);
-  border-radius: 35% 65% 85% 15% / 70% 50% 50% 30%;
-  top: 0.75em;
-  left: 0;
-  width: 0.2em;
-  height: 0.25em;
-}
+.wheel-front { right: 12px; }
+.wheel-rear  { left: 12px; }
 
-.hamster__body {
-  animation: hamsterBody var(--dur) ease-in-out infinite;
-  background: hsl(30,90%,90%);
-  border-radius: 50% 30% 50% 30% / 15% 60% 40% 40%;
-  box-shadow: 0.1em 0.75em 0 hsl(30,90%,55%) inset, 0.15em -0.5em 0 hsl(30,90%,80%) inset;
-  top: 0.25em;
-  left: 2em;
-  width: 4.5em;
-  height: 3em;
-  transform-origin: 17% 50%;
-  transform-style: preserve-3d;
-}
-
-.hamster__limb--fr,
-.hamster__limb--fl {
-  clip-path: polygon(0 0,100% 0,70% 80%,60% 100%,0% 100%,40% 80%);
-  top: 2em;
-  left: 0.5em;
-  width: 1em;
-  height: 1.5em;
-  transform-origin: 50% 0;
-}
-
-.hamster__limb--fr {
-  animation: hamsterFRLimb var(--dur) linear infinite;
-  background: linear-gradient(hsl(30,90%,80%) 80%,hsl(0,90%,75%) 80%);
-  transform: rotate(15deg) translateZ(-1px);
-}
-
-.hamster__limb--fl {
-  animation: hamsterFLLimb var(--dur) linear infinite;
-  background: linear-gradient(hsl(30,90%,90%) 80%,hsl(0,90%,85%) 80%);
-  transform: rotate(15deg);
-}
-
-.hamster__limb--br,
-.hamster__limb--bl {
-  border-radius: 0.75em 0.75em 0 0;
-  clip-path: polygon(0 0,100% 0,100% 30%,70% 90%,70% 100%,30% 100%,40% 90%,0% 30%);
-  top: 1em;
-  left: 2.8em;
-  width: 1.5em;
-  height: 2.5em;
-  transform-origin: 50% 30%;
-}
-
-.hamster__limb--br {
-  animation: hamsterBRLimb var(--dur) linear infinite;
-  background: linear-gradient(hsl(30,90%,80%) 90%,hsl(0,90%,75%) 90%);
-  transform: rotate(-25deg) translateZ(-1px);
-}
-
-.hamster__limb--bl {
-  animation: hamsterBLLimb var(--dur) linear infinite;
-  background: linear-gradient(hsl(30,90%,90%) 90%,hsl(0,90%,85%) 90%);
-  transform: rotate(-25deg);
-}
-
-.hamster__tail {
-  animation: hamsterTail var(--dur) linear infinite;
-  background: hsl(0,90%,85%);
-  border-radius: 0.25em 50% 50% 0.25em;
-  box-shadow: 0 -0.2em 0 hsl(0,90%,75%) inset;
-  top: 1.5em;
-  right: -0.5em;
-  width: 1em;
-  height: 0.5em;
-  transform: rotate(30deg) translateZ(-1px);
-  transform-origin: 0.25em 0.25em;
-}
-
-.spoke {
-  animation: spoke var(--dur) linear infinite;
-  background: radial-gradient(100% 100% at center,hsl(0,0%,60%) 4.8%,hsla(0,0%,60%,0) 5%), linear-gradient(hsla(0,0%,55%,0) 46.9%,hsl(0,0%,65%) 47% 52.9%,hsla(0,0%,65%,0) 53%) 50% 50% / 99% 99% no-repeat;
-}
-
-@keyframes hamster {
-  from, to { transform: rotate(4deg) translate(-0.8em,1.85em); }
-  50% { transform: rotate(0) translate(-0.8em,1.85em); }
-}
-
-@keyframes hamsterHead {
-  from, 25%, 50%, 75%, to { transform: rotate(0); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(8deg); }
-}
-
-@keyframes hamsterEye {
-  from, 90%, to { transform: scaleY(1); }
-  95% { transform: scaleY(0); }
-}
-
-@keyframes hamsterEar {
-  from, 25%, 50%, 75%, to { transform: rotate(0); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(12deg); }
-}
-
-@keyframes hamsterBody {
-  from, 25%, 50%, 75%, to { transform: rotate(0); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-2deg); }
-}
-
-@keyframes hamsterFRLimb {
-  from, 25%, 50%, 75%, to { transform: rotate(50deg) translateZ(-1px); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-30deg) translateZ(-1px); }
-}
-
-@keyframes hamsterFLLimb {
-  from, 25%, 50%, 75%, to { transform: rotate(-30deg); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(50deg); }
-}
-
-@keyframes hamsterBRLimb {
-  from, 25%, 50%, 75%, to { transform: rotate(-60deg) translateZ(-1px); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(20deg) translateZ(-1px); }
-}
-
-@keyframes hamsterBLLimb {
-  from, 25%, 50%, 75%, to { transform: rotate(20deg); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(-60deg); }
-}
-
-@keyframes hamsterTail {
-  from, 25%, 50%, 75%, to { transform: rotate(30deg) translateZ(-1px); }
-  12.5%, 37.5%, 62.5%, 87.5% { transform: rotate(10deg) translateZ(-1px); }
-}
-
-@keyframes spoke {
-  from { transform: rotate(0); }
-  to { transform: rotate(-1turn); }
+@keyframes wheelSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 </style>
 
 <div class="form-container">
   <div class="form-card">
     <h2 class="form-title">🗺️ Plan Your Smart Route</h2>
-    
+
     <form method="POST" action="{{ url_for('SmartRoute') }}" id="routeForm">
       {{ form.hidden_tag() }}
-      
+
       <div class="input-group">
         <label class="form-label">🔍 Source Location</label>
         {{ form.source(class="form-input city-search", placeholder="Enter starting city") }}
         <datalist id="source-cities"></datalist>
       </div>
-      
+
       <div class="input-group">
         <label class="form-label">📍 Destination Location</label>
         {{ form.destination(class="form-input city-search", placeholder="Enter destination city") }}
         <datalist id="dest-cities"></datalist>
       </div>
-      
+
       <div class="input-group">
         <label class="form-label">⚙️ Route Preference</label>
         {{ form.preference(class="form-input") }}
       </div>
-      
+
       <button type="submit" class="submit-btn" id="submitBtn">
-        <div class="spinner" id="spinner">
-          <div class="wheel-and-hamster">
-            <div class="wheel"></div>
-            <div class="hamster">
-              <div class="hamster__body">
-                <div class="hamster__head">
-                  <div class="hamster__ear"></div>
-                  <div class="hamster__eye"></div>
-                  <div class="hamster__nose"></div>
-                </div>
-                <div class="hamster__limb hamster__limb--fr"></div>
-                <div class="hamster__limb hamster__limb--fl"></div>
-                <div class="hamster__limb hamster__limb--br"></div>
-                <div class="hamster__limb hamster__limb--bl"></div>
-                <div class="hamster__tail"></div>
-              </div>
-            </div>
-            <div class="spoke"></div>
-          </div>
-        </div>
         <span id="btnText">Find Optimal Route</span>
       </button>
     </form>
   </div>
 </div>
 
+<!-- Car loading overlay -->
+<div id="loadingOverlay" role="status" aria-label="Finding your route">
+  <div class="road-scene">
+    <div class="car">
+      <div class="car-top">
+        <div class="car-window-rear"></div>
+        <div class="car-window-front"></div>
+      </div>
+      <div class="car-body">
+        <div class="headlight"></div>
+        <div class="taillight"></div>
+      </div>
+      <div class="wheel wheel-rear"></div>
+      <div class="wheel wheel-front"></div>
+    </div>
+    <div class="road">
+      <div class="road-dashes"></div>
+    </div>
+  </div>
+  <p class="loading-label">Finding your optimal route<span class="dots"><span>.</span><span>.</span><span>.</span></span></p>
+</div>
+
 <script>
-// Pre-select preference from options page
 window.addEventListener('load', function() {
   const preference = sessionStorage.getItem('routePreference');
   if (preference) {
     const selectElement = document.querySelector('select[name="preference"]');
-    if (selectElement) {
-      selectElement.value = preference;
-    }
+    if (selectElement) selectElement.value = preference;
     sessionStorage.removeItem('routePreference');
   }
 });
 
 document.getElementById('routeForm').addEventListener('submit', function() {
-  const btn = document.getElementById('submitBtn');
-  const spinner = document.getElementById('spinner');
-  const btnText = document.getElementById('btnText');
-  
-  btn.classList.add('loading');
-  spinner.style.display = 'inline-block';
-  btnText.textContent = 'Finding Route...';
+  document.getElementById('submitBtn').classList.add('loading');
+  document.getElementById('btnText').textContent = 'Finding Route...';
+  const overlay = document.getElementById('loadingOverlay');
+  overlay.style.display = 'flex';
 });
 </script>
 

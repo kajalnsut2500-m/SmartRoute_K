@@ -24,33 +24,47 @@ def get_direct_route(source, destination, preference='distance'):
         return None
     
     try:
-        # Map preferences to Google Directions API parameters
-        avoid_params = []
-        if preference == 'toll':
-            avoid_params = ['tolls']
-        
-        # Single API call - gets everything we need
+        # Always request all alternatives without avoiding tolls;
+        # for 'toll' preference we compare estimated costs across routes.
         directions = gmaps.directions(
             origin=f"{source}, India",
-            destination=f"{destination}, India", 
+            destination=f"{destination}, India",
             mode="driving",
-            avoid=avoid_params if avoid_params else None,
+            avoid=None,
             departure_time='now',
             traffic_model='best_guess',
             alternatives=True
         )
-        
+
         if not directions:
             return None
-        
-        # Get the best route based on preference
-        best_route = directions[0]
-        if len(directions) > 1 and preference == 'time':
-            # Choose fastest route if multiple available
-            best_route = min(directions, key=lambda r: r['legs'][0].get('duration_in_traffic', r['legs'][0]['duration'])['value'])
-        elif len(directions) > 1 and preference == 'distance':
-            # Choose shortest route
-            best_route = min(directions, key=lambda r: r['legs'][0]['distance']['value'])
+
+        # Select the best route based on preference
+        if preference == 'time':
+            best_route = min(
+                directions,
+                key=lambda r: r['legs'][0].get('duration_in_traffic', r['legs'][0]['duration'])['value']
+            )
+        elif preference == 'distance':
+            best_route = min(
+                directions,
+                key=lambda r: r['legs'][0]['distance']['value']
+            )
+        elif preference == 'toll':
+            # Pick the alternative with the lowest estimated toll cost
+            def _toll_for_route(route):
+                leg = route['legs'][0]
+                dist_km = leg['distance']['value'] / 1000
+                hws = []
+                for step in leg['steps']:
+                    hw = extract_highway_from_step(step)
+                    if hw and hw not in hws:
+                        hws.append(hw)
+                return calculate_route_toll(dist_km, hws, route.get('summary', ''))
+
+            best_route = min(directions, key=_toll_for_route)
+        else:
+            best_route = directions[0]
         
         leg = best_route['legs'][0]
         

@@ -61,6 +61,8 @@ def SmartRoute():
                 route = direct_route_data['route']
                 cost = direct_route_data.get('distance_km', 0) if preference == 'distance' else direct_route_data.get('duration_hours', 0) if preference == 'time' else direct_route_data.get('toll_cost', 0)
                 total_toll = direct_route_data.get('toll_cost', 0)
+                dist_val = direct_route_data.get('distance_km', 0)
+                time_val = direct_route_data.get('duration_hours', 0)
                 highway_path = direct_route_data.get('highways', [])
                 flash(f"✅ Direct route via {direct_route_data.get('route_summary', 'optimal path')}", "success")
             else:
@@ -72,59 +74,36 @@ def SmartRoute():
                     dest_idx = cities.index(destination)
                     cost = matrix_data[src_idx][dest_idx]
                     route = [source, destination]
-                    total_toll = get_matrix('toll')[0][src_idx][dest_idx] if preference != 'toll' else cost
+                    toll_matrix, _ = get_matrix('toll')
+                    dist_matrix, _ = get_matrix('distance')
+                    time_matrix, _ = get_matrix('time')
+                    total_toll = toll_matrix[src_idx][dest_idx] if preference != 'toll' else cost
+                    dist_val = dist_matrix[src_idx][dest_idx]
+                    time_val = time_matrix[src_idx][dest_idx]
                     highway_path = ["NH48"]
                 else:
                     flash("Route not found", "danger")
                     return redirect(url_for('SmartRoute'))
         else:
-            # Fallback to Floyd-Warshall
             flash("⚠️ Using offline estimates", "warning")
-            matrix_data, cities = build_matrix(preference)
+            from Toll.static_data import get_matrix
+            matrix_data, cities = get_matrix(preference)
             
             if source not in cities or destination not in cities:
                 flash("Invalid Source or Destination", "danger")
                 return redirect(url_for('SmartRoute'))
-                
-            fw = floyd_warshall(matrix_data)
+            
             src_idx = cities.index(source)
             dest_idx = cities.index(destination)
-            
-            dist_matrix, next_matrix = fw
-            cost = dist_matrix[src_idx][dest_idx]
-            
-            if cost >= float('inf'):
-                flash("No path found between the selected cities.", "danger")
-                return redirect(url_for('SmartRoute'))
-                
-            route = reconstruct_path(src_idx, dest_idx, next_matrix, cities)
-        
-            # Handle toll calculation for Floyd-Warshall fallback
-            total_toll = 0
+            cost = matrix_data[src_idx][dest_idx]
+            route = [source, destination]
             highway_path = []
-            if preference == 'toll':
-                total_toll = cost
-            else:
-                toll_matrix, _ = build_matrix('toll')
-                for i in range(len(route) - 1):
-                    from_idx = cities.index(route[i])
-                    to_idx = cities.index(route[i + 1])
-                    if from_idx < len(toll_matrix) and to_idx < len(toll_matrix[from_idx]):
-                        segment_toll = toll_matrix[from_idx][to_idx]
-                        if segment_toll != float('inf'):
-                            total_toll += segment_toll
-            
-            # Get highway names for Floyd-Warshall route
-            if len(route) >= 2:
-                directions = get_route_steps(route[0], route[-1])
-                if directions and 'legs' in directions:
-                    for leg in directions['legs']:
-                        if 'steps' in leg:
-                            for step in leg['steps']:
-                                if 'html_instructions' in step:
-                                    highway = extract_highway_name(step['html_instructions'])
-                                    if highway and highway not in highway_path:
-                                        highway_path.append(highway)
+            toll_matrix, _ = get_matrix('toll')
+            dist_matrix, _ = get_matrix('distance')
+            time_matrix, _ = get_matrix('time')
+            total_toll = toll_matrix[src_idx][dest_idx] if preference != 'toll' else cost
+            dist_val = dist_matrix[src_idx][dest_idx]
+            time_val = time_matrix[src_idx][dest_idx]
             
         # Redirect to results page
         return render_template(
@@ -135,6 +114,8 @@ def SmartRoute():
             source=source,
             destination=destination,
             total_toll=total_toll,
+            dist_val=dist_val,
+            time_val=time_val,
             preference=preference
         )
 
