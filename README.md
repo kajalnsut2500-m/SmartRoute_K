@@ -1,14 +1,11 @@
 # 🚦 SmartRoute — Intelligent Toll & Route Planner for India
-
 > A full-stack Flask web application that helps users plan optimized travel routes across Indian cities based on **shortest distance**, **minimum toll cost**, or **fastest travel time**.
 
 ---
 
 ## ✨ Features
-
 - **3 Route Preferences** — Shortest Distance, Minimum Toll, Fastest Time
-- **Floyd-Warshall Algorithm** — computes optimal paths across all city pairs simultaneously
-- **Google Maps Integration** — live map view and one-click turn-by-turn navigation
+- **Google Maps Integration** — live traffic-aware directions with one-click navigation
 - **User Authentication** — secure signup/login with bcrypt password hashing
 - **Save Route** — authenticated users can save routes to a personal history (SQLite DB)
 - **City Autocomplete** — smart dropdown suggestions for source and destination
@@ -32,8 +29,7 @@
 | **Backend** | Python, Flask, Flask-Login, SQLAlchemy ORM, bcrypt |
 | **Frontend** | HTML5, CSS3, JavaScript (ES6+), Jinja2 |
 | **Database** | SQLite |
-| **Algorithm** | Floyd-Warshall, Weighted Graph Theory |
-| **External API** | Google Maps JavaScript API & Directions API |
+| **External API** | Google Maps Directions API |
 
 ---
 
@@ -45,16 +41,15 @@ SmartRoute_k/
 │   ├── run.py              # Entry point
 │   ├── __init__.py         # App factory & extensions
 │   ├── routes.py           # Flask routes & API endpoints
-│   ├── routes_api.py       # Route computation logic
 │   ├── models.py           # SQLAlchemy DB models (User, SavedRoute)
 │   ├── forms.py            # WTForms definitions
-│   ├── floyd_warshall.py   # Core routing algorithm
-│   ├── city_network.py     # Indian city graph data
+│   ├── direct_routing.py   # Core routing logic (Google Maps)
+│   ├── static_data.py      # Offline fallback city matrix
+│   ├── floyd_warshall.py   # Graph algorithm (offline fallback)
 │   ├── map_service.py      # Google Maps API integration
 │   ├── templates/          # Jinja2 HTML templates
 │   └── static/             # CSS, JS, images
 ├── instance/               # SQLite database (auto-created)
-├── screenshots/            # App screenshots
 ├── .env                    # Environment variables (not committed)
 ├── requirements.txt        # Python dependencies
 └── README.md
@@ -65,32 +60,33 @@ SmartRoute_k/
 ## 🚀 Installation
 
 ### 1. Clone the repository
-
 ```bash
-git clone https://github.com/kajalnsut2500-m/SmartRoute_k.git
-cd SmartRoute_k
+git clone https://github.com/kajalnsut2500-m/SmartRoute_K.git
+cd SmartRoute_K
 ```
 
 ### 2. Create and activate a virtual environment
-
 ```bash
 python -m venv venv
 source venv/bin/activate        # macOS / Linux
-# venv\Scripts\activate         # Windows
+venv\Scripts\activate           # Windows
 ```
 
 ### 3. Install dependencies
-
 ```bash
 pip install -r requirements.txt
 ```
 
 ### 4. Set up environment variables
+Create a `.env` file in the `Toll/` folder:
 
-Create a `.env` file in the project root (see section below).
+```env
+GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
+SECRET_KEY=your_secret_key_here
+FLASK_DEBUG=True
+```
 
 ### 5. Run the app
-
 ```bash
 cd Toll
 python run.py
@@ -102,52 +98,47 @@ Open `http://localhost:8000` in your browser.
 
 ## 🔑 Environment Variables
 
-Create a `.env` file in the project root with the following keys:
+| Variable | Required | Description |
+|---|---|---|
+| `GOOGLE_MAPS_API_KEY` | Recommended | For live traffic & directions |
+| `SECRET_KEY` | Yes | Flask session security key |
+| `FLASK_DEBUG` | No | Set `True` for development |
 
-```env
-# Google Maps API key (required for live map and directions)
-GOOGLE_MAPS_API_KEY=your_google_maps_api_key_here
-
-# Flask secret key (any long random string)
-SECRET_KEY=your_secret_key_here
-
-# Optional: set to 'development' or 'production'
-FLASK_ENV=development
-```
-
-> **Note:** Without `GOOGLE_MAPS_API_KEY`, the app falls back to static offline route data automatically.
+> **Note:** Without `GOOGLE_MAPS_API_KEY`, the app automatically falls back to static offline route data.
 
 ---
 
 ## 🧠 How It Works
 
-1. **Login / Signup** — User creates an account (password stored as bcrypt hash).
-2. **Select Cities** — Type source and destination; city autocomplete narrows suggestions.
-3. **Choose Preference** — Pick Shortest Distance, Minimum Toll, or Fastest Time.
-4. **Graph Computation** — Floyd-Warshall runs on a weighted graph of Indian cities and highways, computing optimal paths for all three criteria at once.
-5. **View Results** — App displays distance (km), travel time (hrs), toll cost (₹), and the highway path taken.
-6. **Navigate** — "Start Navigation" opens Google Maps with the exact route for turn-by-turn directions.
-7. **Save Route** — Logged-in users can save any result to their personal route history stored in SQLite.
+1. **Login / Signup** — User creates an account (password stored as bcrypt hash)
+2. **Select Cities** — Type source and destination with autocomplete suggestions
+3. **Choose Preference** — Pick Shortest Distance, Minimum Toll, or Fastest Time
+4. **Route Computation** — Single Google Maps API call fetches up to 3 route alternatives; best route selected based on preference
+5. **View Results** — App displays distance (km), travel time (hrs), toll cost (₹), and highways used
+6. **Navigate** — "Start Navigation" opens Google Maps for turn-by-turn directions
+7. **Save Route** — Save any result to personal route history stored in SQLite
 
 ---
 
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-<img width="1469" alt="Home Page" src="https://github.com/user-attachments/assets/fd8af9ae-f457-4bdd-8240-e5d6fc0f84fe" />
+<img width="2600" alt="Home Page" src="https://github.com/user-attachments/assets/d9c29513-b62a-47eb-8073-ddc95d2e8077" />
 
 ### 🔐 Login & Authentication
-<img width="1469" alt="Login Page" src="https://github.com/user-attachments/assets/4342a431-d057-4d81-89ef-f2fe52a69d2e" />
+<img width="2600" alt="Login Page" src="https://github.com/user-attachments/assets/0971725c-ad18-4799-ba67-fa852a8fb467" />
 
 ### 🗺️ Plan Your Route
-<img width="1469" alt="Route Planner" src="https://github.com/user-attachments/assets/4289a139-8e0d-4cd7-aaeb-80f9201d00aa" />
+<img width="2600" alt="Plan Route" src="https://github.com/user-attachments/assets/954ab6fd-fc9b-4b5e-a345-d7418e9c691d" />
 
 ### ✅ Route Results
-**Shortest Distance** — Delhi → Mumbai
-![Shortest Distance Result](screenshots/Screenshot%202026-06-06%20at%206.55.02%20PM.png)
+<img width="2600" alt="Route Results" src="https://github.com/user-attachments/assets/c420429f-e1d9-464a-814d-7c81e77bb073" />
 
-**Fastest Route** — Delhi → Mumbai
-![Fastest Route Result](screenshots/Screenshot%202026-06-06%20at%206.54.28%20PM.png)
+### 🗺️ Google Maps Navigation
+<img width="1892" alt="Google Maps Navigation" src="https://github.com/user-attachments/assets/61d39c19-3c29-4968-9091-f6553728093e" />
+
+### 📋 Route History
+<img width="2600" alt="Route History" src="https://github.com/user-attachments/assets/cb7c23b1-8d82-4940-97d3-9c4008f026ef" />
 
 ---
 
